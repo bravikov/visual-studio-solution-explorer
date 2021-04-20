@@ -1,5 +1,8 @@
 # Visual Studio Solution Format
 
+Solution (.sln) file
+https://docs.microsoft.com/en-us/visualstudio/extensibility/internals/solution-dot-sln-file?view=vs-2019
+
 ## Project Statement
 
 ```

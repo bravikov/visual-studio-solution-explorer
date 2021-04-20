@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef H_413A52C4_63ED_4AE0_8DA2_1CF1E340DF49
+#define H_413A52C4_63ED_4AE0_8DA2_1CF1E340DF49
 
 #include <QMainWindow>
 
@@ -18,4 +18,4 @@ public:
 private:
     Ui::MainWindow *ui;
 };
-#endif // MAINWINDOW_H
+#endif // H_413A52C4_63ED_4AE0_8DA2_1CF1E340DF49
