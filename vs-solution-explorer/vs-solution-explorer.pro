@@ -11,11 +11,14 @@ QMAKE_CXXFLAGS += -Werror -Wnon-virtual-dtor -Wsuggest-override
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    SolutionParser/FileSolutionSource.cpp \
     SolutionParser/ISolution.cpp \
+    SolutionParser/ISolutionGlobal.cpp \
     SolutionParser/ISolutionParser.cpp \
     SolutionParser/ISolutionProject.cpp \
     SolutionParser/ISolutionSource.cpp \
     SolutionParser/Solution.cpp \
+    SolutionParser/SolutionGlobal.cpp \
     SolutionParser/SolutionParser.cpp \
     SolutionParser/SolutionProject.cpp \
     SolutionParser/SolutionProjectType.cpp \
@@ -25,11 +28,14 @@ SOURCES += \
     mainwindow.cpp
 
 HEADERS += \
+    SolutionParser/FileSolutionSource.h \
     SolutionParser/ISolution.h \
+    SolutionParser/ISolutionGlobal.h \
     SolutionParser/ISolutionParser.h \
     SolutionParser/ISolutionProject.h \
     SolutionParser/ISolutionSource.h \
     SolutionParser/Solution.h \
+    SolutionParser/SolutionGlobal.h \
     SolutionParser/SolutionParser.h \
     SolutionParser/SolutionProject.h \
     SolutionParser/SolutionProjectType.h \
