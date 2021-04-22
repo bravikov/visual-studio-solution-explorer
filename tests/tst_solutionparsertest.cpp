@@ -177,7 +177,7 @@ void SolutionParserTest::SolutionWithoutProjects()
 
 void SolutionParserTest::ComplexSolutionFile()
 {
-    FileSolutionSource solutionFile{"TestSolutions/Project1.sln"};
+    FileSolutionSource solutionFile{"TestSolutions/Solution1.sln"};
 
     std::unique_ptr<ISolutionParser> solutionParser = std::make_unique<SolutionParser>();
     auto solution = solutionParser->parse(solutionFile);

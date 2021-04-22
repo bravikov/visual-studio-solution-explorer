@@ -124,12 +124,53 @@ namespace {
             return true;
         }
 
+        bool preProjectSection(const std::string& line)
+        {
+            try {
+                const std::regex pattern{"\tProjectSection\\((.+)\\) = preProject"};
+                std::smatch match;
+                const bool ok = std::regex_match(line, match, pattern);
+
+                if (!ok || match.size() != 1+1) {
+                    return false;
+                }
+
+                //match[1].str();
+            }
+            catch (const std::regex_error& error) {
+                throw ::ParsingError{error.what()};
+            }
+            return true;
+        }
+
+        bool preProjectSectionItem(const std::string& line)
+        {
+            try {
+                const std::regex pattern{"\t\t(.+) = (.+)"};
+                std::smatch match;
+                const bool ok = std::regex_match(line, match, pattern);
+
+                if (!ok || match.size() != 1+2) {
+                    return false;
+                }
+
+                if (match[1].str() != match[2].str()) {
+                    throw ::ParsingError{
+                        "The left side doesn't equal to the right side of a pre project item"};
+                }
+            }
+            catch (const std::regex_error& error) {
+                throw ::ParsingError{error.what()};
+            }
+            return true;
+        }
+
         bool projectDependenciesSection(const std::string& line)
         {
             return line == "\tProjectSection(ProjectDependencies) = postProject";
         }
 
-        bool endProjectDependenciesSection(const std::string& line)
+        bool endProjectSection(const std::string& line)
         {
             return line == "\tEndProjectSection";
         }
@@ -259,7 +300,7 @@ namespace {
         {
             try {
                 const std::regex pattern{
-                    fmt::format("\t\t{uuid}\\.{conf}\\.(ActiveCfg|Build.0) = {conf}",
+                    fmt::format("\t\t{uuid}\\.{conf}\\.(ActiveCfg|Build.0|Deploy.0) = {conf}",
                                 "uuid"_a=uuidPattern,
                                 "conf"_a=configurationPlatformPattern)};
                 std::smatch match;
@@ -287,6 +328,9 @@ namespace {
                 }
                 else if (field == "Build.0") {
                     global->m_builedProjectConfigurations.push_back(projectConfigurationMap);
+                }
+                else if (field == "Deploy.0") {
+                    global->m_deployedProjectConfigurations.push_back(projectConfigurationMap);
                 }
                 else {
                     throw ::ParsingError{"Unexpected project configuration"};
@@ -449,8 +493,16 @@ std::unique_ptr<ISolution> SolutionParser::parse(const ISolutionSource& solution
         return ::LineParser::projectDependenciesSection(line);
     });
 
-    auto endProjectDependenciesSection = std::make_shared<State>([](const std::string& line) {
-        return ::LineParser::endProjectDependenciesSection(line);
+    auto preProjectSection = std::make_shared<State>([](const std::string& line) {
+        return ::LineParser::preProjectSection(line);
+    });
+
+    auto preProjectSectionItem = std::make_shared<State>([](const std::string& line) {
+        return ::LineParser::preProjectSectionItem(line);
+    });
+
+    auto endProjectSection = std::make_shared<State>([](const std::string& line) {
+        return ::LineParser::endProjectSection(line);
     });
 
     auto projectDependency = std::make_shared<State>([&](const std::string& line) {
@@ -529,13 +581,19 @@ std::unique_ptr<ISolution> SolutionParser::parse(const ISolutionSource& solution
         >> endProject
         >> startProject
         >> projectDependenciesSection
-        >> endProjectDependenciesSection
+        >> endProjectSection
         >> endProject
         >> startGlobal
         >> endGlobal;
 
-    projectDependenciesSection >> projectDependency >> endProjectDependenciesSection;
+    projectDependenciesSection >> projectDependency >> endProjectSection;
     projectDependency >> projectDependency;
+
+    startProject
+        >> preProjectSection
+        >> preProjectSectionItem
+        >> preProjectSectionItem
+        >> endProjectSection;
 
     minimumVsVersion >> startGlobal;
 
@@ -592,7 +650,9 @@ std::unique_ptr<ISolution> SolutionParser::parse(const ISolutionSource& solution
     const auto lines = getLines(content, bomSize(bom));
 
     auto currentState = start;
+    size_t lineCount = 0;
     for (const std::string& line: lines) {
+        lineCount++;
         if (line.empty()) {
             continue;
         }
@@ -601,12 +661,14 @@ std::unique_ptr<ISolution> SolutionParser::parse(const ISolutionSource& solution
         }
         catch (const ::BadParserState& error) {
             m_lastError = {ErrorCode::BadParserState,
-                           fmt::format("Bad parser state: '{}'. Line: '{}'.", error.what(), line)};
+                           fmt::format("Bad parser state: '{}'.\nLine {}: '{}'.",
+                                       error.what(), lineCount, line)};
             return nullptr;
         }
         catch (const ::ParsingError& error) {
             m_lastError = {ErrorCode::ParsingError,
-                           fmt::format("Parsing error: '{}'. Line: '{}'.", error.what(), line)};
+                           fmt::format("Parsing error: '{}'.\nLine {}: '{}'.",
+                                       error.what(), lineCount, line)};
             return nullptr;
         }
     }

@@ -8,7 +8,7 @@ FileSolutionSource::FileSolutionSource(const std::string& filename)
     std::ifstream fileStream(filename, std::ios::binary);
 
     if (!fileStream.is_open()) {
-        throw std::runtime_error{fmt::format("Cannot open file: '{}'", filename)};
+        throw std::runtime_error{"Cannot open file"};
     }
 
     char c;

@@ -1,0 +1,21 @@
+# TODO
+
+## Solution Parser
+
+### Deploy.0
+
+```
+{0064A6D4-637A-46BD-B46B-175A0AFD9910}.Test Debug|x64.ActiveCfg = Test Debug|x64
+{0064A6D4-637A-46BD-B46B-175A0AFD9910}.Test Debug|x64.Build.0 = Test Debug|x64
+{0064A6D4-637A-46BD-B46B-175A0AFD9910}.Test Debug|x64.Deploy.0 = Test Debug|x64
+```
+
+### Solution Folder Items
+
+```
+Project("{2150F333-8FDC-12A3-9489-1A3956A46DF8}") = "Folder1", "Folder1", "{4328713B-63BA-484D-9FD8-A42C29BA57A7}"
+\tProjectSection(SolutionItems) = preProject
+\t\tMyFile.txt = MyFile.txt
+\tEndProjectSection
+EndProject
+```

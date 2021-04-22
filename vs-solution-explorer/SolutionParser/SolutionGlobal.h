@@ -19,5 +19,6 @@ public:
     SolutionConfigurations m_solutionConfigurations;
     ProjectConfigurations m_projectConfigurations;
     ProjectConfigurations m_builedProjectConfigurations;
+    ProjectConfigurations m_deployedProjectConfigurations;
 };
 #endif // H_B358A7AE_7DAD_40D0_861E_9F5923DDB452

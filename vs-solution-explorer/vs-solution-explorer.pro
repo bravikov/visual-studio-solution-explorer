@@ -22,6 +22,7 @@ SOURCES += \
     SolutionParser/SolutionParser.cpp \
     SolutionParser/SolutionProject.cpp \
     SolutionParser/SolutionProjectType.cpp \
+    SolutionTreeModel.cpp \
     Utils/Bom.cpp \
     Utils/StringAlgorithms.cpp \
     main.cpp \
@@ -39,6 +40,7 @@ HEADERS += \
     SolutionParser/SolutionParser.h \
     SolutionParser/SolutionProject.h \
     SolutionParser/SolutionProjectType.h \
+    SolutionTreeModel.h \
     Utils/Bom.h \
     Utils/StringAlgorithms.h \
     mainwindow.h
@@ -56,6 +58,7 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-DISTFILES +=
+DISTFILES += \
+    ../TODO
 
 OTHER_FILES += SolutionParser/SLN-format.md
