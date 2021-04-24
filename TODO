@@ -19,3 +19,9 @@ Project("{2150F333-8FDC-12A3-9489-1A3956A46DF8}") = "Folder1", "Folder1", "{4328
 \tEndProjectSection
 EndProject
 ```
+
+## User Interface
+
+* Solution tree sorting
+* Icons for projects and folders
+

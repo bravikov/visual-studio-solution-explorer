@@ -11,13 +11,13 @@ public:
     SolutionProjectType type() const override;
     const std::string& name() const override;
     const std::string& path() const override;
-    const std::string& uuid() const override;
+    const Uuid& uuid() const override;
     const Dependencies& dependencies() const override;
 
     SolutionProjectType m_type;
     std::string m_name;
     std::string m_path;
-    std::string m_uuid;
+    Uuid m_uuid;
     Dependencies m_dependencies;
 };
 

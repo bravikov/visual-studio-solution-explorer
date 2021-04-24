@@ -21,7 +21,7 @@ const std::string& SolutionProject::path() const
     return m_path;
 }
 
-const std::string& SolutionProject::uuid() const
+const ISolutionProject::Uuid& SolutionProject::uuid() const
 {
     return m_uuid;
 }

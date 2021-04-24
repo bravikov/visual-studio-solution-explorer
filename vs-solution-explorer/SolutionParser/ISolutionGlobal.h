@@ -1,6 +1,7 @@
 #ifndef H_A3DD3998_8A6E_45A1_96F8_837E7845BF9C
 #define H_A3DD3998_8A6E_45A1_96F8_837E7845BF9C
 
+#include "ISolutionProject.h"
 #include <string>
 #include <unordered_map>
 #include <list>
@@ -10,8 +11,8 @@ class ISolutionGlobal
 public:
     struct NestedProject
     {
-        std::string projectUuid;
-        std::string parentProjectUuid;
+        ISolutionProject::Uuid projectUuid;
+        ISolutionProject::Uuid parentProjectUuid;
     };
 
     struct SolutionConfiguration
@@ -28,7 +29,7 @@ public:
 
     struct ProjectConfigurationMap
     {
-        std::string projectUuid;
+        ISolutionProject::Uuid projectUuid;
         SolutionConfiguration solutionConfiguration;
         ProjectConfiguration projectConfiguration;
     };

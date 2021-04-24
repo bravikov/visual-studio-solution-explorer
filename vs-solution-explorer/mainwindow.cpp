@@ -28,6 +28,10 @@ void MainWindow::openSolution()
 
     m_settings.setValue("lastFolder", QFileInfo(filename).absoluteDir().absolutePath());
 
+    if (filename.isEmpty()) {
+        return;
+    }
+
     emit openedSolution(filename);
 }
 

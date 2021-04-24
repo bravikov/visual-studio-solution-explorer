@@ -9,13 +9,15 @@ enum class SolutionProjectType;
 class ISolutionProject
 {
 public:
+    using Uuid = std::string;
+
     virtual ~ISolutionProject();
     virtual SolutionProjectType type() const = 0;
     virtual const std::string& name() const = 0;
     virtual const std::string& path() const = 0;
-    virtual const std::string& uuid() const = 0;
+    virtual const Uuid& uuid() const = 0;
 
-    using Dependencies = std::list<std::string>;
+    using Dependencies = std::list<Uuid>;
     virtual const Dependencies& dependencies() const = 0;
 };
 

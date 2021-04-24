@@ -4,62 +4,9 @@
 #include <QAbstractItemModel>
 #include <memory>
 
-class ISolutionTreeNode
-{
-public:
-    using Ptr = std::shared_ptr<ISolutionTreeNode>;
-
-    virtual ~ISolutionTreeNode() {}
-
-    virtual int row() const = 0;
-    virtual Ptr parent() const = 0;
-
-    virtual QString value() const = 0;
-
-    virtual int childCount() const = 0;
-    virtual Ptr child(int row) const = 0;
-};
-
-class SolutionNode: public ISolutionTreeNode
-{
-public:
-    SolutionNode(int row, const QString& value, std::shared_ptr<SolutionNode> parent)
-        : m_row{row}
-        , m_value{value}
-        , m_parent{parent}
-    {}
-
-    QString value() const override
-    {
-        return m_value;
-    }
-
-    Ptr parent() const override
-    {
-        return m_parent;
-    }
-
-    Ptr child(int row) const override
-    {
-        return m_childs[row];
-    }
-
-    int childCount() const override
-    {
-        return m_childs.count();
-    }
-
-    int row() const override
-    {
-        return m_row;
-    }
-
-    int m_row = 0;
-    QString m_value;
-    Ptr m_parent;
-    QVector<std::shared_ptr<SolutionNode>> m_childs;
-};
-
+namespace SolutionTree {
+    class IItem;
+}
 
 class SolutionTreeModel : public QAbstractItemModel
 {
@@ -86,8 +33,7 @@ public slots:
     void openSolution(const QString& filename);
 
 private:
-
-    QVector<ISolutionTreeNode::Ptr> m_nodes;
+    QVector<std::shared_ptr<SolutionTree::IItem>> m_solutions;
 };
 
 #endif // SOLUTIONTREEMODEL_H
