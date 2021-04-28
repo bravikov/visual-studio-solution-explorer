@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>VS Solution Explorer</string>
+   <string>Visual Studio Solution Explorer</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -33,7 +33,14 @@
     <property name="title">
      <string>File</string>
     </property>
+    <widget class="QMenu" name="menuRecentFiles">
+     <property name="title">
+      <string>Recent Files</string>
+     </property>
+     <addaction name="separator"/>
+    </widget>
     <addaction name="actionOpenSolution"/>
+    <addaction name="menuRecentFiles"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
@@ -90,9 +97,43 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>menuFile</sender>
+   <signal>aboutToShow()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showRecentFiles()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>84</x>
+     <y>49</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>231</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>menuRecentFiles</sender>
+   <signal>triggered(QAction*)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>openRecentSolution(QAction*)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>79</x>
+     <y>25</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>231</x>
+     <y>231</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>openSolution()</slot>
   <slot>showAbout()</slot>
+  <slot>showRecentFiles()</slot>
+  <slot>openRecentSolution(QAction*)</slot>
  </slots>
 </ui>

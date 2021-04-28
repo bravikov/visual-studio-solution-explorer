@@ -167,7 +167,7 @@ void SolutionTreeModel::openSolution(const QString& filename)
         return;
     }
 
-    QString soulutionName = QFileInfo{filename}.baseName();
+    QString soulutionName = QFileInfo{filename}.completeBaseName();
 
     std::unordered_map<ISolutionProject::Uuid,
                        std::shared_ptr<SolutionTree::IItem>> uuidItemIndex;

@@ -15,6 +15,7 @@ TEMPLATE = app
 QMAKE_CXXFLAGS += -Werror -Wnon-virtual-dtor -Wsuggest-override
 
 SOURCES += \
+    RecentValuesTest.cpp \
     StringAlgorithmsTest.cpp \
     TestSuite.cpp \
     main.cpp \

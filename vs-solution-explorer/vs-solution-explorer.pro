@@ -24,6 +24,7 @@ SOURCES += \
     SolutionParser/SolutionProjectType.cpp \
     SolutionTreeModel.cpp \
     Utils/Bom.cpp \
+    Utils/RecentValues.cpp \
     Utils/StringAlgorithms.cpp \
     main.cpp \
     mainwindow.cpp
@@ -42,6 +43,7 @@ HEADERS += \
     SolutionParser/SolutionProjectType.h \
     SolutionTreeModel.h \
     Utils/Bom.h \
+    Utils/RecentValues.h \
     Utils/StringAlgorithms.h \
     mainwindow.h
 

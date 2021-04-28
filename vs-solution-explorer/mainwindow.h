@@ -5,6 +5,28 @@
 #include <QMainWindow>
 #include <QSettings>
 
+class RecentFiles
+{
+public:
+    void addFilename(const QString& filename);
+    QStringList getFilenames();
+
+private:
+    class Settings
+    {
+    public:
+        bool isValid(const QString& value);
+        QString get(size_t i);
+        void set(size_t i, const QString& value);
+
+    private:
+        QSettings m_settings;
+    };
+
+    Settings m_settings;
+    static const int m_max;
+};
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -19,7 +41,10 @@ public:
 
 public slots:
     void openSolution();
+    void openRecentSolution(QAction* action);
+    void openSolution(const QString& filename);
     void showAbout();
+    void showRecentFiles();
 
 signals:
     void openedSolution(const QString& filename);
@@ -27,6 +52,7 @@ signals:
 private:
     Ui::MainWindow* m_ui;
     QSettings m_settings;
+    RecentFiles m_recentFiles;
 
     SolutionTreeModel* m_model;
 };
