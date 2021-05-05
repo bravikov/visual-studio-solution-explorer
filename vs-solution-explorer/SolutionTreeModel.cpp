@@ -27,6 +27,9 @@ namespace SolutionTree {
         virtual void addChild(const std::shared_ptr<IItem>& child) = 0;
     };
 
+    using UuidItemIndex = std::unordered_map<ISolutionProject::Uuid,
+                                             std::shared_ptr<SolutionTree::IItem>>;
+
     class BaseItem: public IItem
     {
     public:
@@ -150,6 +153,45 @@ QVariant SolutionTreeModel::data(const QModelIndex& index, int role) const
     return node->name().c_str();
 }
 
+namespace
+{
+    std::vector<ISolutionGlobal::NestedProject>
+    sortedNestedProjects(const ISolutionGlobal::NestedProjects& projects,
+                         const SolutionTree::UuidItemIndex& uuidItemIndex)
+    {
+        using T = ISolutionGlobal::NestedProject;
+
+        std::vector<T> sortedProjects{projects.begin(), projects.end()};
+
+        std::sort(sortedProjects.begin(), sortedProjects.end(),
+                  [&uuidItemIndex](const T& a, const T& b){
+            return uuidItemIndex.find(a.projectUuid)->second->name()
+                   <
+                   uuidItemIndex.find(b.projectUuid)->second->name();
+        });
+
+        return sortedProjects;
+    }
+
+    std::vector<std::shared_ptr<SolutionTree::IItem>>
+    sortedItems(const SolutionTree::UuidItemIndex& uuidItemIndex)
+    {
+        using T = std::shared_ptr<SolutionTree::IItem>;
+
+        std::vector<T> items;
+        items.reserve(uuidItemIndex.size());
+        for (const auto& itemIt: uuidItemIndex) {
+            items.push_back(itemIt.second);
+        }
+
+        std::sort(items.begin(), items.end(), [](const T& a, const T& b){
+            return a->name() < b->name();
+        });
+
+        return items;
+    }
+}
+
 void SolutionTreeModel::openSolution(const QString& filename)
 {
     std::unique_ptr<ISolution> parsedSolution;
@@ -169,8 +211,7 @@ void SolutionTreeModel::openSolution(const QString& filename)
 
     QString soulutionName = QFileInfo{filename}.completeBaseName();
 
-    std::unordered_map<ISolutionProject::Uuid,
-                       std::shared_ptr<SolutionTree::IItem>> uuidItemIndex;
+    SolutionTree::UuidItemIndex uuidItemIndex;
 
     for (const auto& project: parsedSolution->projects()) {
         std::shared_ptr<SolutionTree::BaseItem> projectItem;
@@ -184,7 +225,10 @@ void SolutionTreeModel::openSolution(const QString& filename)
         uuidItemIndex[project->uuid()] = projectItem;
     }
 
-    for (const auto& project: parsedSolution->global()->nestedProjects()) {
+    const auto& nestedProjects = parsedSolution->global()->nestedProjects();
+    const auto sortedNestedProjects = ::sortedNestedProjects(nestedProjects, uuidItemIndex);
+
+    for (const auto& project: sortedNestedProjects) {
         auto itemIt = uuidItemIndex.find(project.projectUuid);
         if (itemIt == uuidItemIndex.end()) {
             QMessageBox::warning(nullptr, "Solution tree error",
@@ -216,10 +260,10 @@ void SolutionTreeModel::openSolution(const QString& filename)
     solutionItem->setName(soulutionName.toStdString());
     solutionItem->setParent(nullptr, m_solutions.size());
 
-    for (const auto& projectIt: uuidItemIndex) {
-        if (!projectIt.second->parent()) {
-            projectIt.second->setParent(solutionItem, solutionItem->childCount());
-            solutionItem->addChild(projectIt.second);
+    for (const auto& project: sortedItems(uuidItemIndex)) {
+        if (!project->parent()) {
+            project->setParent(solutionItem, solutionItem->childCount());
+            solutionItem->addChild(project);
         }
     }
 
