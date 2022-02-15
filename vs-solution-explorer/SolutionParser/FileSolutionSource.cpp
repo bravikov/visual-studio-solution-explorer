@@ -1,5 +1,4 @@
 #include "FileSolutionSource.h"
-#include <fmt/format.h>
 #include <fstream>
 #include <iterator>
 
